@@ -1,7 +1,6 @@
 import { Link } from 'react-router-dom';
 import { AlertTriangle, Network, Workflow, ArrowRight, Check } from 'lucide-react';
 import Button from '../components/common/Button';
-import Card from '../components/common/Card';
 
 export default function Home() {
   const features = [
