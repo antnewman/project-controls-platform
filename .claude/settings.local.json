@@ -6,7 +6,9 @@
       "Bash(node scripts/verify.js:*)",
       "Bash(node scripts/verify.cjs:*)",
       "Bash(npm install:*)",
-      "Bash(npm run dev:*)"
+      "Bash(npm run dev:*)",
+      "Bash(mkdir:*)",
+      "Read(//c/Users/antjs/tortoiseai-website/**)"
     ],
     "deny": [],
     "ask": []
