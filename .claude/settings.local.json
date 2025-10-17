@@ -5,7 +5,8 @@
       "Bash(npx tsc:*)",
       "Bash(node scripts/verify.js:*)",
       "Bash(node scripts/verify.cjs:*)",
-      "Bash(npm install:*)"
+      "Bash(npm install:*)",
+      "Bash(npm run dev:*)"
     ],
     "deny": [],
     "ask": []

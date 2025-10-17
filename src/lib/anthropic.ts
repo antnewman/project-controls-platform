@@ -84,6 +84,153 @@ export async function generateWBS(narrative: string, template?: string): Promise
 }
 
 /**
+ * Identify risks from WBS phases and activities
+ */
+export async function identifyRisksFromWBS(
+  phases: WBSPhase[],
+  projectName: string
+): Promise<Risk[]> {
+  if (MOCK_MODE || !anthropic) {
+    // Simulate API delay
+    await new Promise(resolve => setTimeout(resolve, 2000));
+
+    const risks: Risk[] = [];
+    let riskCount = 1;
+
+    phases.forEach(phase => {
+      // Add phase-level risks
+      risks.push({
+        id: `R${riskCount++}`,
+        description: `If ${phase.name.toLowerCase()} phase is delayed, then project timeline may be impacted`,
+        mitigation: `Regular progress monitoring and early warning system for ${phase.name.toLowerCase()}`,
+        probability: 3,
+        impact: 4,
+        category: phase.name,
+        owner: 'Project Manager'
+      });
+
+      // Add activity-specific risks for high-risk activities
+      phase.activities.forEach(activity => {
+        if (activity.milestone || activity.duration > 10) {
+          risks.push({
+            id: `R${riskCount++}`,
+            description: `If ${activity.name.toLowerCase()} encounters delays or quality issues, then ${phase.name.toLowerCase()} deliverables may be compromised`,
+            mitigation: `Allocate experienced resources to ${activity.name.toLowerCase()} and implement quality checkpoints`,
+            probability: Math.min(5, Math.floor(activity.duration / 5) + 2),
+            impact: activity.milestone ? 4 : 3,
+            category: phase.name,
+            owner: ''
+          });
+        }
+      });
+
+      // Add resource risks
+      if (phase.activities.length > 5) {
+        risks.push({
+          id: `R${riskCount++}`,
+          description: `If adequate resources are not available for ${phase.name.toLowerCase()}, then project delivery may be delayed`,
+          mitigation: `Secure resource commitments early and maintain resource pool for ${phase.name.toLowerCase()}`,
+          probability: 3,
+          impact: 3,
+          category: 'Resource Management',
+          owner: 'Resource Manager'
+        });
+      }
+    });
+
+    return risks;
+  }
+
+  try {
+    const prompt = buildRiskIdentificationPrompt(phases, projectName);
+
+    const message = await anthropic.messages.create({
+      model: 'claude-3-5-sonnet-20241022',
+      max_tokens: 8192,
+      messages: [
+        {
+          role: 'user',
+          content: prompt,
+        },
+      ],
+    });
+
+    const content = message.content[0];
+    if (content.type === 'text') {
+      return parseRiskIdentificationResponse(content.text);
+    }
+
+    throw new Error('Unexpected response format from Claude');
+  } catch (error) {
+    console.error('Error identifying risks from WBS:', error);
+    // Fallback to mock implementation on error
+    return identifyRisksFromWBS(phases, projectName);
+  }
+}
+
+/**
+ * Build prompt for risk identification from WBS
+ */
+function buildRiskIdentificationPrompt(phases: WBSPhase[], projectName: string): string {
+  return `You are a project risk management expert. Analyze the following Work Breakdown Structure and identify potential risks for the project "${projectName}".
+
+WBS PHASES AND ACTIVITIES:
+${phases.map(phase => `
+Phase: ${phase.name}
+Activities:
+${phase.activities.map(act => `  - ${act.id}: ${act.name} (${act.duration} ${act.unit}${act.milestone ? ' - MILESTONE' : ''})`).join('\n')}
+`).join('\n')}
+
+For each phase and critical activity, identify risks using the "If-Then" format:
+- "If [trigger event], then [consequence]"
+
+For each risk, provide:
+1. Risk ID (R1, R2, etc.)
+2. Clear description (using If-Then format)
+3. Mitigation strategy
+4. Probability (1-5, where 5 is most likely)
+5. Impact (1-5, where 5 is most severe)
+6. Category (the phase name or risk type)
+7. Suggested owner role
+
+Focus on:
+- Schedule delays for critical activities
+- Resource availability issues
+- Quality concerns for deliverables
+- Dependencies between activities
+- Technical/execution risks for complex activities
+
+Return your response as a JSON array with this structure:
+[
+  {
+    "id": "R1",
+    "description": "If-Then format risk description",
+    "mitigation": "Specific mitigation strategy",
+    "probability": number (1-5),
+    "impact": number (1-5),
+    "category": "Phase name or risk type",
+    "owner": "Suggested owner role"
+  }
+]`;
+}
+
+/**
+ * Parse risk identification response from Claude
+ */
+function parseRiskIdentificationResponse(response: string): Risk[] {
+  try {
+    // Try to extract JSON from the response
+    const jsonMatch = response.match(/\[[\s\S]*\]/);
+    if (!jsonMatch) throw new Error('No JSON found in response');
+
+    return JSON.parse(jsonMatch[0]);
+  } catch (error) {
+    console.error('Error parsing risk identification response:', error);
+    return [];
+  }
+}
+
+/**
  * Build prompt for risk analysis
  */
 function buildRiskAnalysisPrompt(risks: Risk[], heuristics: Heuristic[]): string {
