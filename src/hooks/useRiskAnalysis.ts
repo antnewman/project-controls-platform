@@ -3,37 +3,52 @@ import type { Risk, Heuristic, AnalysisResult } from '../lib/types';
 import { analyzeRisks } from '../lib/anthropic';
 
 export function useRiskAnalysis() {
+  const [step, setStep] = useState(1);
+  const [risks, setRisks] = useState<Risk[]>([]);
+  const [selectedHeuristics, setSelectedHeuristics] = useState<Heuristic[]>([]);
+  const [results, setResults] = useState<AnalysisResult | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [result, setResult] = useState<AnalysisResult | null>(null);
 
-  const analyze = async (risks: Risk[], heuristics: Heuristic[]) => {
+  const handleFileUpload = (parsedRisks: Risk[]) => {
+    setRisks(parsedRisks);
+    setError(null);
+    setStep(2);
+  };
+
+  const handleAnalyze = async () => {
     setLoading(true);
     setError(null);
-
     try {
-      const analysisResult = await analyzeRisks(risks, heuristics);
-      setResult(analysisResult);
-      return analysisResult;
+      const analysisResults = await analyzeRisks(risks, selectedHeuristics);
+      setResults(analysisResults);
+      setStep(3);
     } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : 'Failed to analyze risks';
-      setError(errorMessage);
-      throw err;
+      setError(err instanceof Error ? err.message : 'Analysis failed');
     } finally {
       setLoading(false);
     }
   };
 
   const reset = () => {
-    setResult(null);
+    setStep(1);
+    setRisks([]);
+    setSelectedHeuristics([]);
+    setResults(null);
     setError(null);
   };
 
   return {
+    step,
+    risks,
+    selectedHeuristics,
+    results,
     loading,
     error,
-    result,
-    analyze,
+    handleFileUpload,
+    handleAnalyze,
+    setSelectedHeuristics,
+    setStep,
     reset,
   };
 }

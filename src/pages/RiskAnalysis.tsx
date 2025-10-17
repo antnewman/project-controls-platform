@@ -1,103 +1,106 @@
-import { useState } from 'react';
+import { useEffect } from 'react';
 import { AlertTriangle } from 'lucide-react';
-import Card from '../components/common/Card';
-import FileUpload from '../components/common/FileUpload';
-import Button from '../components/common/Button';
+import { useRiskAnalysis } from '../hooks/useRiskAnalysis';
+import { RiskUpload } from '../components/risk-analysis/RiskUpload';
+import { HeuristicSelector } from '../components/risk-analysis/HeuristicSelector';
+import { RiskResultsView } from '../components/risk-analysis/RiskResultsView';
 import LoadingSpinner from '../components/common/LoadingSpinner';
 import Alert from '../components/common/Alert';
-import type { Risk } from '../lib/types';
-import { parseRisksFromCSV } from '../lib/utils';
-import { useRiskAnalysis } from '../hooks/useRiskAnalysis';
 import { DEFAULT_HEURISTICS } from '../lib/mockData';
 
 export default function RiskAnalysis() {
-  const [risks, setRisks] = useState<Risk[]>([]);
-  const { loading, error, result, analyze } = useRiskAnalysis();
+  const {
+    step,
+    risks,
+    selectedHeuristics,
+    results,
+    loading,
+    error,
+    handleFileUpload,
+    handleAnalyze,
+    setSelectedHeuristics,
+    reset,
+  } = useRiskAnalysis();
 
-  const handleFileUpload = (uploadResult: { data: unknown[] }) => {
-    const parsedRisks = parseRisksFromCSV(uploadResult.data);
-    setRisks(parsedRisks);
-  };
-
-  const handleAnalyze = async () => {
-    if (risks.length === 0) return;
-    await analyze(risks, DEFAULT_HEURISTICS);
-  };
+  // Initialize with default heuristics when moving to step 2
+  useEffect(() => {
+    if (step === 2 && selectedHeuristics.length === 0) {
+      setSelectedHeuristics(DEFAULT_HEURISTICS);
+    }
+  }, [step, selectedHeuristics.length, setSelectedHeuristics]);
 
   return (
     <div className="container py-12">
+      {/* Page Header */}
       <div className="mb-8">
         <div className="flex items-center gap-3 mb-2">
           <AlertTriangle className="h-8 w-8 text-primary-500" />
-          <h1 className="text-3xl font-bold text-slate-700">Risk Analysis</h1>
+          <h1 className="text-3xl font-bold text-slate-900">Risk Analysis</h1>
         </div>
         <p className="text-slate-600">
-          Take your time to thoroughly analyze your risk register with AI-powered SME heuristics
+          Upload your risk register, select analysis heuristics, and get AI-powered quality insights
         </p>
       </div>
 
-      <div className="space-y-6">
-        <Card header={<h2 className="text-xl font-semibold text-slate-700">Upload Risk Register</h2>}>
-          <FileUpload onUpload={handleFileUpload} />
-          {risks.length > 0 && (
-            <div className="mt-4">
-              <Alert type="success">
-                Successfully loaded {risks.length} risks. Ready to analyze when you are.
-              </Alert>
-            </div>
-          )}
-        </Card>
+      {/* Progress Indicator */}
+      <div className="mb-8 flex items-center justify-center gap-2">
+        <div className={`flex items-center justify-center w-10 h-10 rounded-full font-semibold ${
+          step >= 1 ? 'bg-primary-500 text-white' : 'bg-slate-200 text-slate-500'
+        }`}>
+          1
+        </div>
+        <div className={`w-24 h-1 ${step >= 2 ? 'bg-primary-500' : 'bg-slate-200'}`}></div>
+        <div className={`flex items-center justify-center w-10 h-10 rounded-full font-semibold ${
+          step >= 2 ? 'bg-primary-500 text-white' : 'bg-slate-200 text-slate-500'
+        }`}>
+          2
+        </div>
+        <div className={`w-24 h-1 ${step >= 3 ? 'bg-primary-500' : 'bg-slate-200'}`}></div>
+        <div className={`flex items-center justify-center w-10 h-10 rounded-full font-semibold ${
+          step >= 3 ? 'bg-primary-500 text-white' : 'bg-slate-200 text-slate-500'
+        }`}>
+          3
+        </div>
+      </div>
 
-        {risks.length > 0 && !result && (
-          <Card>
-            <div className="text-center space-y-4">
-              <p className="text-slate-600">
-                {risks.length} risks are ready for analysis. Take your time reviewing before proceeding.
-              </p>
-              <Button onClick={handleAnalyze} loading={loading} disabled={loading}>
-                Begin Analysis
-              </Button>
-            </div>
-          </Card>
-        )}
-
-        {loading && (
-          <Card>
-            <LoadingSpinner text="Building your analysis carefully..." />
-          </Card>
-        )}
-
-        {error && (
+      {/* Error Display */}
+      {error && (
+        <div className="mb-6">
           <Alert type="error" dismissible>
             {error}
           </Alert>
-        )}
+        </div>
+      )}
 
-        {result && (
-          <Card header={<h2 className="text-xl font-semibold text-slate-700">Analysis Results</h2>}>
-            <div className="space-y-4">
-              <div className="p-4 bg-primary-50 rounded-lg border border-primary-200">
-                <div className="text-sm text-slate-600 mb-1">Overall Quality Score</div>
-                <div className="text-3xl font-bold text-primary-600">{result.overallScore}/10</div>
-              </div>
+      {/* Step 1: Upload Risk Register */}
+      {step === 1 && (
+        <RiskUpload onUploadSuccess={handleFileUpload} />
+      )}
 
-              <div>
-                <h3 className="font-semibold text-slate-700 mb-2">Summary</h3>
-                <p className="text-slate-600">{result.summary}</p>
-              </div>
+      {/* Step 2: Select Heuristics */}
+      {step === 2 && (
+        <HeuristicSelector
+          selectedHeuristics={selectedHeuristics}
+          onSelectionChange={setSelectedHeuristics}
+          onContinue={handleAnalyze}
+          risksCount={risks.length}
+        />
+      )}
 
-              <div>
-                <h3 className="font-semibold text-slate-700 mb-2">Recommendations</h3>
-                <ul className="list-disc list-inside space-y-1">
-                  {result.recommendations.map((rec, idx) => (
-                    <li key={idx} className="text-slate-600">{rec}</li>
-                  ))}
-                </ul>
-              </div>
-            </div>
-          </Card>
-        )}
-      </div>
+      {/* Loading State */}
+      {loading && (
+        <div className="bg-white rounded-xl shadow-md p-12">
+          <LoadingSpinner text="Analyzing risks with AI-powered heuristics..." />
+          <p className="text-center text-sm text-slate-600 mt-4">
+            This may take a moment. We're evaluating {risks.length} risk{risks.length !== 1 ? 's' : ''} against {selectedHeuristics.length} heuristic{selectedHeuristics.length !== 1 ? 's' : ''}.
+          </p>
+        </div>
+      )}
+
+      {/* Step 3: View Results */}
+      {step === 3 && results && !loading && (
+        <RiskResultsView results={results} onReset={reset} />
+      )}
     </div>
   );
 }
