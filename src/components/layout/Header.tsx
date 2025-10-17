@@ -26,10 +26,10 @@ export default function Header() {
           <Link to="/" className="flex items-center gap-2">
             <Turtle className="h-8 w-8 text-primary-500" />
             <div className="flex flex-col">
-              <span className="text-xl font-bold text-slate-800">
+              <span className="text-xl font-semibold text-slate-900">
                 {BRAND_NAME}
               </span>
-              <span className="text-xs text-slate-500 font-medium">Project Controls</span>
+              <span className="text-xs text-slate-600 font-medium">Project Controls</span>
             </div>
           </Link>
 

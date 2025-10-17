@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { AlertTriangle, Network, Workflow, ArrowRight, Check } from 'lucide-react';
+import { AlertTriangle, Network, Workflow, ArrowRight, CheckCircle } from 'lucide-react';
 import Button from '../components/common/Button';
 
 export default function Home() {
@@ -36,42 +36,40 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-slate-50">
       {/* Hero Section */}
-      <section className="bg-white py-20 md:py-32">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="max-w-4xl mx-auto text-center space-y-8">
-            <h1 className="text-5xl md:text-6xl font-bold text-slate-800 leading-tight">
-              Project Controls{' '}
-              <span className="text-primary-500">
-                Intelligence Platform
-              </span>
-            </h1>
+      <section className="bg-gradient-to-br from-slate-50 to-slate-100 py-20">
+        <div className="container mx-auto px-6 text-center">
+          <h1 className="text-5xl md:text-6xl font-bold text-slate-900 mb-6">
+            Project Controls Intelligence Platform
+          </h1>
+          <p className="text-xl text-slate-600 mb-4 max-w-3xl mx-auto">
+            AI-powered project planning built carefully, designed for lasting results
+          </p>
+          <p className="text-sm text-slate-500 italic mb-8">
+            Steady progress. Lasting results.
+          </p>
 
-            <p className="text-xl text-slate-600 max-w-3xl mx-auto">
-              AI-powered project planning built carefully, designed for lasting results
-            </p>
+          {/* Green checkmarks with key features */}
+          <div className="flex flex-wrap justify-center gap-8 mb-10 text-slate-700">
+            {keyPoints.map((point, index) => (
+              <div key={index} className="flex items-center gap-2">
+                <CheckCircle className="text-success w-5 h-5" />
+                <span>{point}</span>
+              </div>
+            ))}
+          </div>
 
-            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center pt-4">
-              <Link to="/integrated">
-                <Button size="lg" variant="primary" className="gap-2">
-                  Build Your Project <ArrowRight className="h-5 w-5" />
-                </Button>
-              </Link>
-              <Link to="/risk-analysis">
-                <Button size="lg" variant="secondary">
-                  Explore Features
-                </Button>
-              </Link>
-            </div>
-
-            {/* Key Points with Checkmarks */}
-            <div className="flex flex-col sm:flex-row gap-6 justify-center items-center pt-8">
-              {keyPoints.map((point, index) => (
-                <div key={index} className="flex items-center gap-2">
-                  <Check className="h-5 w-5 text-success-500" />
-                  <span className="text-slate-700">{point}</span>
-                </div>
-              ))}
-            </div>
+          {/* Buttons */}
+          <div className="flex gap-4 justify-center">
+            <Link to="/integrated">
+              <Button size="lg" variant="primary" className="gap-2">
+                Build Your Project <ArrowRight className="h-5 w-5" />
+              </Button>
+            </Link>
+            <Link to="/risk-analysis">
+              <Button size="lg" variant="secondary">
+                Explore Features
+              </Button>
+            </Link>
           </div>
         </div>
       </section>
@@ -80,7 +78,7 @@ export default function Home() {
       <section className="py-20 bg-slate-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold text-slate-800 mb-4">
+            <h2 className="text-4xl font-bold text-slate-900 mb-4">
               Reliable Tools for Project Success
             </h2>
             <p className="text-xl text-slate-600 max-w-2xl mx-auto">
@@ -98,11 +96,11 @@ export default function Home() {
                   <div className="flex items-center justify-center w-16 h-16 rounded-lg bg-primary-50 group-hover:bg-primary-100 transition-colors duration-300">
                     {feature.icon}
                   </div>
-                  <h3 className="text-2xl font-bold text-slate-800">{feature.title}</h3>
+                  <h3 className="text-2xl font-semibold text-slate-900">{feature.title}</h3>
                   <p className="text-slate-600 leading-relaxed">{feature.description}</p>
                   <Link to={feature.href}>
                     <Button variant="secondary" className="w-full gap-2 group/btn">
-                      Explore this tool
+                      Learn more
                       <ArrowRight className="h-4 w-4 group-hover/btn:translate-x-1 transition-transform" />
                     </Button>
                   </Link>
@@ -140,7 +138,7 @@ export default function Home() {
       {/* CTA Section */}
       <section className="py-20 bg-slate-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-4xl font-bold text-slate-800 mb-6">
+          <h2 className="text-4xl font-bold text-slate-900 mb-6">
             Ready to build lasting project controls?
           </h2>
           <p className="text-xl text-slate-600 mb-8 max-w-2xl mx-auto">

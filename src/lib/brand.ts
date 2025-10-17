@@ -11,9 +11,9 @@
  */
 
 export const BRAND_COLORS = {
-  primary: '#d946ef',      // Tortoise Fuchsia
+  primary: '#D946EF',      // Tortoise Fuchsia
   slate: '#334155',        // Deep Slate
-  softGrey: '#f8fafc',     // Soft Grey (backgrounds)
+  softGrey: '#F8FAFC',     // Soft Grey (backgrounds)
   success: '#10B981',      // Accent Green
 } as const;
 
