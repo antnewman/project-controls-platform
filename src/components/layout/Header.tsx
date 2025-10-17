@@ -1,5 +1,5 @@
 import { Link, useLocation } from 'react-router-dom';
-import { BarChart3, Menu, X } from 'lucide-react';
+import { Turtle, Menu, X } from 'lucide-react';
 import { useState } from 'react';
 import { cn } from '../../lib/utils';
 import { BRAND_NAME } from '../../lib/brand';
@@ -19,17 +19,17 @@ export default function Header() {
   const isActive = (path: string) => location.pathname === path;
 
   return (
-    <header className="sticky top-0 z-50 bg-white border-b border-slate-200 shadow-sm">
-      <nav className="container mx-auto px-4 sm:px-6 lg:px-8">
+    <header className="sticky top-0 z-50 bg-white shadow-sm">
+      <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
-          <Link to="/" className="flex items-center gap-3">
-            <BarChart3 className="h-8 w-8 text-primary-500" />
+          <Link to="/" className="flex items-center gap-2">
+            <Turtle className="h-8 w-8 text-primary-500" />
             <div className="flex flex-col">
-              <span className="text-lg font-bold text-slate-700">
-                Project Controls AI
+              <span className="text-xl font-bold text-slate-800">
+                {BRAND_NAME}
               </span>
-              <span className="text-xs text-slate-500">by {BRAND_NAME}</span>
+              <span className="text-xs text-slate-500 font-medium">Project Controls</span>
             </div>
           </Link>
 
@@ -40,10 +40,10 @@ export default function Header() {
                 key={item.name}
                 to={item.href}
                 className={cn(
-                  'px-4 py-2 rounded-lg text-sm font-medium transition-colors duration-300',
+                  'px-4 py-2 text-sm font-medium transition-colors duration-200',
                   isActive(item.href)
-                    ? 'text-primary-500 bg-primary-50'
-                    : 'text-slate-600 hover:text-primary-500 hover:bg-slate-50'
+                    ? 'text-primary-500'
+                    : 'text-slate-700 hover:text-primary-500'
                 )}
               >
                 {item.name}
@@ -53,7 +53,7 @@ export default function Header() {
 
           {/* Mobile menu button */}
           <button
-            className="md:hidden p-2 rounded-lg hover:bg-slate-100 transition-colors duration-300"
+            className="md:hidden p-2 rounded-lg hover:bg-slate-100 transition-colors duration-200"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             aria-label="Toggle menu"
           >
@@ -67,17 +67,17 @@ export default function Header() {
 
         {/* Mobile Navigation */}
         {mobileMenuOpen && (
-          <div className="md:hidden py-4 space-y-1">
+          <div className="md:hidden py-4 space-y-1 border-t border-slate-200">
             {navigation.map((item) => (
               <Link
                 key={item.name}
                 to={item.href}
                 onClick={() => setMobileMenuOpen(false)}
                 className={cn(
-                  'block px-4 py-2 rounded-lg text-sm font-medium transition-colors duration-300',
+                  'block px-4 py-2 text-sm font-medium transition-colors duration-200',
                   isActive(item.href)
-                    ? 'text-primary-500 bg-primary-50'
-                    : 'text-slate-600 hover:text-primary-500 hover:bg-slate-50'
+                    ? 'text-primary-500'
+                    : 'text-slate-700 hover:text-primary-500'
                 )}
               >
                 {item.name}
