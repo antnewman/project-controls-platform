@@ -30,3 +30,12 @@ dist-ssr
 
 # Keep the example file
 !.env.example
+
+# Testing
+coverage/
+.nyc_output/
+test-results/
+playwright-report/
+*.lcov
+lighthouse-results/
+playwright/.cache/
