@@ -28,6 +28,7 @@ export default function Header() {
     { name: 'Home', href: '/' },
     { name: 'Risk Analysis', href: '/risk-analysis' },
     { name: 'WBS Generator', href: '/wbs-generator' },
+    { name: 'Lessons Library', href: '/lessons-library' },
     { name: 'Integrated Workflow', href: '/integrated' },
     { name: 'Dashboard', href: '/dashboard' },
   ];

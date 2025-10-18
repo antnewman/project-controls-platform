@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { AlertTriangle, Network, Workflow, ArrowRight, CheckCircle } from 'lucide-react';
+import { AlertTriangle, Network, Workflow, ArrowRight, CheckCircle, BookOpen } from 'lucide-react';
 import Button from '../components/common/Button';
 
 export default function Home() {
@@ -19,10 +19,17 @@ export default function Home() {
       href: '/wbs-generator',
     },
     {
+      icon: <BookOpen className="h-10 w-10 text-primary-500" />,
+      title: 'Lessons Library',
+      description:
+        'Extract and organize lessons from Gateway reviews and assurance documents. Transform past insights into actionable intelligence with AI-powered categorization.',
+      href: '/lessons-library',
+    },
+    {
       icon: <Workflow className="h-10 w-10 text-primary-500" />,
       title: 'Integrated Workflow',
       description:
-        'Complete end-to-end workflow: Generate WBS → Identify risks → Analyze quality. Build your project plan step by step, building something solid.',
+        'Complete end-to-end workflow: Generate WBS → Identify risks → Review lessons → Analyze quality. Build your project plan step by step, building something solid.',
       href: '/integrated',
     },
   ];
@@ -42,7 +49,7 @@ export default function Home() {
             Project Controls Intelligence Platform
           </h1>
           <p className="text-xl text-slate-600 mb-4 max-w-3xl mx-auto">
-            AI-powered project planning built carefully, designed for lasting results
+            AI-powered project planning with risk analysis, WBS generation, and lessons learned. Built carefully, designed for lasting results.
           </p>
           <p className="text-sm text-slate-500 italic mb-8">
             Steady progress. Lasting results.
@@ -139,10 +146,10 @@ export default function Home() {
       <section className="py-20 bg-slate-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-4xl font-bold text-slate-900 mb-6">
-            Ready to build lasting project controls?
+            Supporting Challenges 1, 2 & 4
           </h2>
           <p className="text-xl text-slate-600 mb-8 max-w-2xl mx-auto">
-            Take your time exploring AI-powered tools designed for thorough risk analysis and thoughtful WBS creation
+            Complete project intelligence suite: Risk Analysis (Challenge 1), WBS Generation (Challenge 2), and Lessons Library (Challenge 4). Three challenges, one integrated platform.
           </p>
           <Link to="/integrated">
             <Button size="lg" variant="primary" className="gap-2">

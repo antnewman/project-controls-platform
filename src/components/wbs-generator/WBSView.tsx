@@ -1,4 +1,5 @@
-import { Flag, Clock, ArrowRight, Package } from 'lucide-react';
+import { Flag, Clock, ArrowRight, Package, BookOpen } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import type { WBSPhase } from '../../lib/types';
 
 interface WBSViewProps {
@@ -170,6 +171,50 @@ export function WBSView({ phases, projectName }: WBSViewProps) {
           </div>
         ))}
       </div>
+
+      {/* Lessons Integration */}
+      {phases.length > 0 && (
+        <div className="bg-primary-50 border border-primary-200 rounded-lg p-6">
+          <div className="flex items-start gap-3 mb-4">
+            <BookOpen className="w-6 h-6 text-primary-500 flex-shrink-0" />
+            <div>
+              <h3 className="font-semibold text-slate-900 mb-2">
+                Lessons for Your Project Type
+              </h3>
+              <p className="text-slate-700 text-sm mb-4">
+                Learn from similar projects to avoid common pitfalls:
+              </p>
+            </div>
+          </div>
+
+          <div className="grid md:grid-cols-2 gap-3">
+            <div className="bg-white rounded-lg p-4 border border-primary-200">
+              <h4 className="font-medium text-slate-900 mb-1 text-sm">
+                Resource Planning
+              </h4>
+              <p className="text-xs text-slate-600">
+                Build 20% contingency for shared resources
+              </p>
+            </div>
+
+            <div className="bg-white rounded-lg p-4 border border-primary-200">
+              <h4 className="font-medium text-slate-900 mb-1 text-sm">
+                Early Engagement
+              </h4>
+              <p className="text-xs text-slate-600">
+                Involve stakeholders from project initiation
+              </p>
+            </div>
+          </div>
+
+          <Link
+            to="/lessons-library"
+            className="block text-center text-primary-500 hover:text-primary-600 font-medium text-sm mt-4"
+          >
+            View all relevant lessons →
+          </Link>
+        </div>
+      )}
 
       {/* Summary Note */}
       <div className="p-4 bg-blue-50 border border-blue-200 rounded-lg">

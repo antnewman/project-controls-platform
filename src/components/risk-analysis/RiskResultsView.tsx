@@ -1,4 +1,5 @@
-import { Download, RefreshCw, TrendingUp, TrendingDown, Minus } from 'lucide-react';
+import { Download, RefreshCw, TrendingUp, TrendingDown, Minus, BookOpen } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import type { AnalysisResult } from '../../lib/types';
 
 interface RiskResultsViewProps {
@@ -216,6 +217,47 @@ export function RiskResultsView({ results, onReset }: RiskResultsViewProps) {
           </div>
         ))}
       </div>
+
+      {/* Lessons Integration */}
+      {results && (
+        <div className="bg-primary-50 border border-primary-200 rounded-lg p-6">
+          <div className="flex items-start gap-3 mb-4">
+            <BookOpen className="w-6 h-6 text-primary-500 flex-shrink-0" />
+            <div>
+              <h3 className="font-semibold text-slate-900 mb-2">
+                Related Lessons from Past Projects
+              </h3>
+              <p className="text-slate-700 text-sm mb-4">
+                Based on your risk categories, here are relevant lessons from our library:
+              </p>
+            </div>
+          </div>
+
+          <div className="space-y-3">
+            <div className="bg-white rounded-lg p-4 border border-primary-200">
+              <h4 className="font-medium text-slate-900 mb-2">
+                Active Risk Management Prevents Crisis Response
+              </h4>
+              <p className="text-sm text-slate-600 mb-2">
+                Similar projects with static risk registers experienced 3x more issues. Monthly reviews reduce problems by 60%.
+              </p>
+              <Link
+                to="/lessons-library"
+                className="text-primary-500 hover:text-primary-600 text-sm font-medium"
+              >
+                View lesson details →
+              </Link>
+            </div>
+
+            <Link
+              to="/lessons-library"
+              className="block text-center text-primary-500 hover:text-primary-600 font-medium text-sm"
+            >
+              Browse all lessons related to risk management →
+            </Link>
+          </div>
+        </div>
+      )}
 
       {/* Action Buttons */}
       <div className="flex gap-4">

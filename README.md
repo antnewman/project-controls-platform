@@ -1,4 +1,54 @@
-# React + TypeScript + Vite
+# Project Controls Intelligence Platform
+
+**AI-powered project planning with risk analysis, WBS generation, and lessons learned. Built carefully, designed for lasting results.**
+
+Supporting IPA Innovation Space Challenges 1, 2, and 4.
+
+---
+
+## What You Get
+
+### Pre-Built Features
+
+✅ **Risk Analysis Tool (Challenge 1)**
+- CSV file upload and parsing
+- SME heuristics application
+- Quality scoring (1-10)
+- Improvement suggestions
+- Export enhanced risk registers
+
+✅ **WBS Generator (Challenge 2)**
+- Project narrative input
+- AI-powered WBS generation
+- Phase and activity breakdown
+- Dependency mapping
+- Milestone identification
+- CSV export
+
+✅ **Lessons Library (Challenge 4)**
+- Document upload (Gateway reviews, NISTA, assurance reports)
+- AI-powered lesson extraction
+- Automatic categorization and tagging
+- Searchable lessons repository
+- Integration with Risk Analysis and WBS Generator
+- Lessons SME chatbot for guidance
+
+✅ **Integrated Workflow (Challenges 1 + 2 + 4)**
+- End-to-end project planning
+- WBS → Risk identification → Lessons review → Quality analysis
+- Unified results dashboard
+
+### Technical Stack
+
+- **Frontend**: React 18 + TypeScript + Vite
+- **Styling**: Tailwind CSS
+- **Routing**: React Router
+- **AI**: Anthropic Claude (Sonnet 4)
+- **Database**: Supabase (optional)
+- **Icons**: Lucide React
+- **Animations**: Framer Motion
+
+---
 
 ## Environment Setup
 
