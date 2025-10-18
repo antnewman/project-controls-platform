@@ -9,6 +9,7 @@ export const formatDate = (date: string | Date): string => {
     year: 'numeric',
     month: 'short',
     day: 'numeric',
+    timeZone: 'UTC',
   });
 };
 
@@ -51,19 +52,25 @@ export const getRiskColor = (severity: string): string => {
  * Convert CSV data to Risk objects
  */
 export const parseRisksFromCSV = (data: unknown[]): Risk[] => {
-  return (data as Record<string, unknown>[]).map((row, index) => ({
-    id: `risk-${index + 1}`,
-    description: String(row.description || row.Description || ''),
-    mitigation: String(row.mitigation || row.Mitigation || ''),
-    probability: Number(row.probability || row.Probability || 3),
-    impact: Number(row.impact || row.Impact || 3),
-    category: String(row.category || row.Category || 'General'),
-    owner: String(row.owner || row.Owner || ''),
-    score: calculateRiskScore(
-      Number(row.probability || row.Probability || 3),
-      Number(row.impact || row.Impact || 3)
-    ),
-  }));
+  return (data as Record<string, unknown>[]).map((row, index) => {
+    // Get category value - check both lowercase and capitalized versions
+    const categoryValue = row.category !== undefined ? row.category : row.Category;
+    const category = categoryValue !== undefined ? String(categoryValue) : 'General';
+
+    return {
+      id: `risk-${index + 1}`,
+      description: String(row.description || row.Description || ''),
+      mitigation: String(row.mitigation || row.Mitigation || ''),
+      probability: Number(row.probability || row.Probability || 3),
+      impact: Number(row.impact || row.Impact || 3),
+      category,
+      owner: String(row.owner || row.Owner || ''),
+      score: calculateRiskScore(
+        Number(row.probability || row.Probability || 3),
+        Number(row.impact || row.Impact || 3)
+      ),
+    };
+  });
 };
 
 /**

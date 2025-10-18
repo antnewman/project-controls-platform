@@ -9,7 +9,9 @@
       "Bash(npm run dev:*)",
       "Bash(mkdir:*)",
       "Read(//c/Users/antjs/tortoiseai-website/**)",
-      "Bash(npx playwright install)"
+      "Bash(npx playwright install)",
+      "Bash(npm test)",
+      "Bash(npm test -- tests/unit/components/FileUpload.test.tsx)"
     ],
     "deny": [],
     "ask": []

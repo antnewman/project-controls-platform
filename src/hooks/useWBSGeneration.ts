@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import type { WBSPhase } from '../lib/types';
 import { generateWBS } from '../lib/anthropic';
 
@@ -6,6 +6,7 @@ export function useWBSGeneration() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [wbs, setWbs] = useState<WBSPhase[] | null>(null);
+  const latestRequestRef = useRef(0);
 
   const generate = async (narrative: string, template?: string) => {
     if (!narrative.trim()) {
@@ -13,19 +14,30 @@ export function useWBSGeneration() {
       return null;
     }
 
+    // Track this request
+    const currentRequest = ++latestRequestRef.current;
+
     setLoading(true);
     setError(null);
 
     try {
       const result = await generateWBS(narrative, template);
-      setWbs(result);
+
+      // Only update state if this is still the latest request
+      if (currentRequest === latestRequestRef.current) {
+        setWbs(result);
+      }
       return result;
     } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : 'Failed to generate WBS';
-      setError(errorMessage);
+      if (currentRequest === latestRequestRef.current) {
+        const errorMessage = err instanceof Error ? err.message : 'Failed to generate WBS';
+        setError(errorMessage);
+      }
       throw err;
     } finally {
-      setLoading(false);
+      if (currentRequest === latestRequestRef.current) {
+        setLoading(false);
+      }
     }
   };
 

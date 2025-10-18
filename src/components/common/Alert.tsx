@@ -1,10 +1,11 @@
 import { useState } from 'react';
 import type { ReactNode } from 'react';
+import React from 'react';
 import { AlertCircle, CheckCircle, Info, X, XCircle } from 'lucide-react';
 import type { AlertType } from '../../lib/types';
 import { cn } from '../../lib/utils';
 
-interface AlertProps {
+interface AlertProps extends React.HTMLAttributes<HTMLDivElement> {
   type?: AlertType;
   children: ReactNode;
   dismissible?: boolean;
@@ -18,6 +19,7 @@ export default function Alert({
   dismissible = false,
   onDismiss,
   className,
+  ...props
 }: AlertProps) {
   const [visible, setVisible] = useState(true);
 
@@ -43,7 +45,7 @@ export default function Alert({
   };
 
   return (
-    <div className={cn('border rounded-lg p-4 flex items-start gap-3 transition-all duration-300', styles[type], className)}>
+    <div {...props} className={cn('border rounded-lg p-4 flex items-start gap-3 transition-all duration-300', styles[type], className)}>
       <div className="flex-shrink-0 mt-0.5">{icons[type]}</div>
       <div className="flex-1">{children}</div>
       {dismissible && (
